@@ -692,9 +692,35 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var loader_1 = __importDefault(require("@assemblyscript/loader"));
+var loader_1 = __importDefault(require("@assemblyscript/loader")); //
+// OffscreenCanvas polyfill
+// https://gist.github.com/n1ru4l/9c7eff52fe084d67ff15ae6b0af5f171
+//
 
-console.log(loader_1.default);
+
+if (!window.OffscreenCanvas) {
+  window.OffscreenCanvas =
+  /** @class */
+  function () {
+    function OffscreenCanvas(width, height) {
+      var _this = this;
+
+      this.canvas = document.createElement("canvas");
+      this.canvas.width = width;
+      this.canvas.height = height;
+
+      this.canvas.convertToBlob = function () {
+        return new Promise(function (resolve) {
+          _this.canvas.toBlob(resolve);
+        });
+      };
+
+      return this.canvas;
+    }
+
+    return OffscreenCanvas;
+  }();
+}
 
 var initWasm = function initWasm() {
   return __awaiter(void 0, void 0, void 0, function () {
@@ -946,7 +972,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61382" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49456" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
